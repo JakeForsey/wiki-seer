@@ -28,10 +28,16 @@ services:
       - DB_PASSWORD=writer
       - DB_NAME=wikiseer
     depends_on:
-    - postgres
+      postgres:
+        condition: service_healthy
 
   wikiseerapi:
     image: localhost:5000/wikiseerapi
+    healthcheck:
+        test: [ "CMD", "curl", "-f", "http://wikiseerapi:8000/ruok"]
+        timeout: 45s
+        interval: 10s
+        retries: 10
     build:
       context: "wiki-seer-api"
     environment:
@@ -39,15 +45,22 @@ services:
       - DB_PASSWORD=reader
       - DB_NAME=wikiseer
     depends_on:
-    - postgres
+      postgres:
+        condition: service_healthy
     ports:
       - "8000:8000"
 
   wikiseerui:
     image: localhost:5000/wikiseerui
+    healthcheck:
+        test: [ "CMD", "curl", "-f", "http://wikiseerui:8001/ruok"]
+        timeout: 45s
+        interval: 10s
+        retries: 10
     build:
       context: "wiki-seer-ui"
     depends_on:
-    - wikiseerapi
+      wikiseerapi:
+        condition: service_healthy
     ports:
       - "8001:8001"

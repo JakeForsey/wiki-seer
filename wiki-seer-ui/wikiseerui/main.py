@@ -1,4 +1,5 @@
 from datetime import date, timedelta
+from typing import Literal
 
 from dash import dcc
 from dash import html
@@ -19,6 +20,11 @@ app.layout = html.Div([
     ),
     dcc.Graph(id='timeseries-graph')
 ])
+
+
+@app.server.route("/ruok")
+def ruok() -> Literal["OK"]:
+  return "OK"
 
 
 @app.callback(Output('timeseries-graph', 'figure'), [Input('page-dropdown', 'value')])
