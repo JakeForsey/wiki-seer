@@ -1,0 +1,53 @@
+version: '3'
+
+services:
+
+  postgres:
+    image: postgres:15.1
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "wikiseer", "-U", "writer" ]
+      timeout: 45s
+      interval: 10s
+      retries: 10
+    restart: always
+    environment:
+      - POSTGRES_DB=wikiseer
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - ./wiki-seer-db/sql:/docker-entrypoint-initdb.d/
+    ports:
+      - "5432:5432"
+
+  wikiseerdata:
+    image: localhost:5000/wikiseerdata
+    build:
+      context: "wiki-seer-data"
+    environment:
+      - DB_USER=writer
+      - DB_PASSWORD=writer
+      - DB_NAME=wikiseer
+    depends_on:
+    - postgres
+
+  wikiseerapi:
+    image: localhost:5000/wikiseerapi
+    build:
+      context: "wiki-seer-api"
+    environment:
+      - DB_USER=reader
+      - DB_PASSWORD=reader
+      - DB_NAME=wikiseer
+    depends_on:
+    - postgres
+    ports:
+      - "8000:8000"
+
+  wikiseerui:
+    image: localhost:5000/wikiseerui
+    build:
+      context: "wiki-seer-ui"
+    depends_on:
+    - wikiseerapi
+    ports:
+      - "8001:8001"
