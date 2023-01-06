@@ -54,6 +54,12 @@ def get_timeseries(title: str) -> TimeSeries:
     )
 
 
+@app.get("/page/{title}/forecast")
+def get_forecast(title: str) -> TimeSeries:
+    # TODO: Get forecasts
+    pass
+
+
 @app.get("/page")
 def get_pages() -> List[str]:
     cursor = conn.cursor()
