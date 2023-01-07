@@ -57,7 +57,7 @@ def train(conn: Connection, s3: Any) -> Predictor:
     predictor = TemporalFusionTransformerEstimator(
         freq=dataset.freq,
         prediction_length=7,
-        trainer=Trainer(epochs=1)
+        trainer=Trainer(epochs=20)
     ).train(dataset)
 
     date = datetime.now().date().isoformat()

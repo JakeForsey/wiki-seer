@@ -34,23 +34,53 @@ def update_graph(title: str):
 
     response = requests.get(f"http://wikiseerapi:8000/page/{title}/timeseries")
     response.raise_for_status()
-    timeseries = response.json()
-    
+    time_series_forecast = response.json()
+    time_series = time_series_forecast["time_series"]
+    forecast = time_series_forecast["forecast"]
+
     traces = [
+        # Historic data
         {
             "x": [
-                str(date.fromisoformat(timeseries["start_date"]) + timedelta(days=i))
-                for i in range(len(timeseries["page_views"]))
+                str(date.fromisoformat(time_series["start_date"]) + timedelta(days=i))
+                for i in range(len(time_series["page_views"]))
             ],
-            "y": timeseries["page_views"], "type": "scatter"
-         }
+            "y": time_series["page_views"], "type": "scatter"
+         },
+        # Median forecast
+        {
+            "x": [
+                str(date.fromisoformat(forecast["start_date"]) + timedelta(days=i))
+                for i in range(len(forecast["median"]))
+            ],
+            "y": forecast["median"],
+            "type": "scatter",
+            "line": {"color": "grey"}
+        },
+        # Area quantile forecast
+        {
+            "x": [
+                str(date.fromisoformat(forecast["start_date"]) + timedelta(days=i))
+                for i in range(len(forecast["lower"]))
+            ] + [
+                str(date.fromisoformat(forecast["start_date"]) + timedelta(days=i))
+                for i in range(len(forecast["upper"]))
+            ][::-1],
+            "y": forecast["lower"] + forecast["upper"][::-1],
+            "type": "scatter",
+            "fill": "toself",
+            "line": {"color": "rgba(0,0,0,0)"},
+            "fillcolor": "rgba(50,50,50,0.2)",
+        },
     ]
     layout = {
-        'title': f'Time series data for {title}',
+        'title': None,
         'xaxis': {'title': 'Date'},
-        'yaxis': {'title': 'Page views'}
+        'yaxis': {'title': 'Page views'},
+        "showlegend": False
     }
-    return {'data': traces, 'layout': layout}
+    return {'data': traces, 'layout': layout, "showlegend": False}
+
 
 
 if __name__ == '__main__':

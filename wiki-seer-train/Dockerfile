@@ -16,4 +16,4 @@ RUN touch /var/log/cron.log
 # Copy app
 COPY . /app
 
-CMD ["python", "wikiseermodel/main.py"]
+CMD ["python", "wikiseertrain/main.py"]

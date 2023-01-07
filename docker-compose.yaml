@@ -39,10 +39,10 @@ services:
       postgres:
         condition: service_healthy
 
-  wikiseermodel:
-    image: localhost:5000/wikiseermodel
+  wikiseertrain:
+    image: localhost:5000/wikiseertrain
     build:
-      context: "wiki-seer-model"
+      context: "wiki-seer-train"
     environment:
       - DB_USER=reader
       - DB_PASSWORD=reader
