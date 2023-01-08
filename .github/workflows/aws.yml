@@ -32,7 +32,6 @@ on:
 
 env:
   AWS_REGION: us-east-2                         # set this to your preferred AWS region, e.g. us-west-1
-  ECR_REPOSITORY: wikiseer                      # set this to your Amazon ECR repository name
 #   ECS_SERVICE: MY_ECS_SERVICE                 # set this to your Amazon ECS service name
 #   ECS_CLUSTER: MY_ECS_CLUSTER                 # set this to your Amazon ECS cluster name
 #   ECS_TASK_DEFINITION: MY_ECS_TASK_DEFINITION # set this to the path to your Amazon ECS task definition
@@ -73,9 +72,9 @@ jobs:
         # Build a docker container and
         # push it to ECR so that it can
         # be deployed to ECS.
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY/wiki-seer-api:$IMAGE_TAG wiki-seer-api
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY/wiki-seer-api:$IMAGE_TAG
-        echo "image=$ECR_REGISTRY/$ECR_REPOSITORY/wiki-seer-api:$IMAGE_TAG" >> $GITHUB_OUTPUT
+        docker build -t $ECR_REGISTRY/wiki-seer-api:$IMAGE_TAG wiki-seer-api
+        docker push $ECR_REGISTRY/wiki-seer-api:$IMAGE_TAG
+        echo "image=$ECR_REGISTRY/wiki-seer-api:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
     - name: Build, tag, and push wiki-seer-ui to Amazon ECR
       id: build-wiki-seer-ui-image
@@ -86,9 +85,9 @@ jobs:
         # Build a docker container and
         # push it to ECR so that it can
         # be deployed to ECS.
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY/wiki-seer-ui:$IMAGE_TAG wiki-seer-ui
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY/wiki-seer-ui:$IMAGE_TAG
-        echo "image=$ECR_REGISTRY/$ECR_REPOSITORY/wiki-seer-ui:$IMAGE_TAG" >> $GITHUB_OUTPUT
+        docker build -t $ECR_REGISTRY/wiki-seer-ui:$IMAGE_TAG wiki-seer-ui
+        docker push $ECR_REGISTRY/wiki-seer-ui:$IMAGE_TAG
+        echo "image=$ECR_REGISTRY/wiki-seer-ui:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
     - name: Build, tag, and push wiki-seer-data to Amazon ECR
       id: build-wiki-seer-data-image
@@ -99,9 +98,9 @@ jobs:
         # Build a docker container and
         # push it to ECR so that it can
         # be deployed to ECS.
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY/wiki-seer-data:$IMAGE_TAG wiki-seer-data
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY/wiki-seer-data:$IMAGE_TAG
-        echo "image=$ECR_REGISTRY/$ECR_REPOSITORY/wiki-seer-data:$IMAGE_TAG" >> $GITHUB_OUTPUT
+        docker build -t $ECR_REGISTRY/wiki-seer-data:$IMAGE_TAG wiki-seer-data
+        docker push $ECR_REGISTRY/wiki-seer-data:$IMAGE_TAG
+        echo "image=$ECR_REGISTRY/wiki-seer-data:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
     - name: Build, tag, and push wiki-seer-train to Amazon ECR
       id: build-wiki-seer-train-image
@@ -112,9 +111,9 @@ jobs:
         # Build a docker container and
         # push it to ECR so that it can
         # be deployed to ECS.
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY/wiki-seer-train:$IMAGE_TAG wiki-seer-train
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY/wiki-seer-train:$IMAGE_TAG
-        echo "image=$ECR_REGISTRY/$ECR_REPOSITORY/wiki-seer-train:$IMAGE_TAG" >> $GITHUB_OUTPUT
+        docker build -t $ECR_REGISTRY/wiki-seer-train:$IMAGE_TAG wiki-seer-train
+        docker push $ECR_REGISTRY/wiki-seer-train:$IMAGE_TAG
+        echo "image=$ECR_REGISTRY/wiki-seer-train:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
 #     - name: Fill in the new image ID in the Amazon ECS task definition
 #       id: task-def
